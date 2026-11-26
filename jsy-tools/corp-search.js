@@ -6,6 +6,62 @@
   let scheduled = false;
   let enabled = false;
   let settingChanged = false;
+  let recentsChanged = false;
+  let recentRanks = new Map();
+  let lastCurrentKey = null;
+
+  function setRecents(value) {
+    recentRanks = new Map();
+    if (Array.isArray(value)) value.forEach((key, index) => {
+      if (typeof key === 'string' && !recentRanks.has(key)) recentRanks.set(key, index);
+    });
+  }
+
+  function reorder(rows) {
+    const parent = rows[0]?.parentElement;
+    if (!parent) return;
+    const members = new Set(rows);
+    let cursor = rows.find(row => !members.has(row.previousElementSibling));
+    for (const row of rows) {
+      if (cursor !== row) parent.insertBefore(row, cursor);
+      cursor = row.nextElementSibling;
+    }
+  }
+
+  function enterpriseRuns(list) {
+    const runs = [];
+    let current = [];
+    for (const child of list.children) {
+      if (child.querySelector('.truncate')) current.push(child);
+      else if (current.length) {
+        runs.push(current);
+        current = [];
+      }
+    }
+    if (current.length) runs.push(current);
+    return runs;
+  }
+
+  function sortRows(rows, state) {
+    for (const row of rows) {
+      if (!state.originalOrder.has(row)) state.originalOrder.set(row, state.nextOrder++);
+      row.dispatchEvent(new Event('jsy-tools-corp-identity', { bubbles: true }));
+      const key = row.getAttribute('data-jsy-corp-key');
+      const current = row.querySelector(state.grouped ? '.op-current' : '.text-sm.px-3');
+      if (key && current && lastCurrentKey !== key) {
+        lastCurrentKey = key;
+        try {
+          Promise.resolve(chrome.runtime.sendMessage({ type: 'remember-recent-corp', key }))
+            .catch(error => console.error('[jsy-tools] 最近使用企业同步失败', error));
+        } catch (error) { console.error('[jsy-tools] 最近使用企业同步失败', error); }
+      }
+    }
+    reorder([...rows].sort((a, b) => {
+      const aRank = recentRanks.get(a.getAttribute('data-jsy-corp-key')) ?? Infinity;
+      const bRank = recentRanks.get(b.getAttribute('data-jsy-corp-key')) ?? Infinity;
+      return aRank - bRank || state.originalOrder.get(a) - state.originalOrder.get(b);
+    }));
+  }
 
   function resetScroll(root) {
     root.scrollTop = 0;
@@ -50,7 +106,7 @@
     host.insertBefore(box, grouped ? host.querySelector(':scope > .corp-block') : list);
     list.setAttribute('data-jsy-corp-list', '');
     if (grouped) list.setAttribute('data-jsy-corp-grouped', '');
-    const state = { box, input, clear, empty, grouped };
+    const state = { box, input, clear, empty, grouped, originalOrder: new WeakMap(), nextOrder: 0 };
     states.set(list, state);
     input.addEventListener('input', () => { filter(list, state); resetScroll(list); });
     clear.addEventListener('click', () => {
@@ -71,13 +127,16 @@
     return state;
   }
 
-  function filter(list, { input, clear, empty, grouped }) {
+  function filter(list, state) {
+    const { input, clear, empty, grouped } = state;
     const query = input.value.trim().toLocaleLowerCase();
     let count = 0;
     const groups = grouped ? [...list.querySelectorAll(':scope > .corp-block')] : [list];
     for (const [index, group] of groups.entries()) {
       let matchesInGroup = 0;
-      const rows = grouped ? group.querySelectorAll(':scope > .corp-wrapper > .corp-item') : group.children;
+      const rows = grouped ? [...group.querySelectorAll(':scope > .corp-wrapper > .corp-item')] : [...group.children];
+      if (grouped) sortRows(rows, state);
+      else enterpriseRuns(group).forEach(run => sortRows(run, state));
       for (const row of rows) {
         const name = row.querySelector(grouped ? '.corp-name' : '.truncate');
         if (!name) continue;
@@ -106,11 +165,19 @@
       .filter(list => list.matches('.corps-container') || list.querySelector(':scope > .corp-block'));
     if (!enabled) {
       lists.forEach(list => {
-        states.get(list)?.box.remove();
+        const state = states.get(list);
+        if (state) {
+          const runs = state.grouped
+            ? [...list.querySelectorAll(':scope > .corp-block > .corp-wrapper')].map(container => [...container.children])
+            : enterpriseRuns(list);
+          runs.forEach(rows => reorder(rows.sort((a, b) =>
+            (state.originalOrder.get(a) ?? Infinity) - (state.originalOrder.get(b) ?? Infinity))));
+          state.box.remove();
+        }
         states.delete(list);
         list.removeAttribute('data-jsy-corp-list');
         list.removeAttribute('data-jsy-corp-grouped');
-        for (const attribute of ['data-jsy-corp-hidden', 'data-jsy-corp-group', 'data-jsy-corp-group-empty']) {
+        for (const attribute of ['data-jsy-corp-hidden', 'data-jsy-corp-group', 'data-jsy-corp-group-empty', 'data-jsy-corp-key']) {
           list.querySelectorAll(`[${attribute}]`).forEach(node => node.removeAttribute(attribute));
         }
       });
@@ -157,14 +224,21 @@
   }
   new MutationObserver(schedule).observe(document, { childList: true, characterData: true, subtree: true });
   chrome.storage.onChanged.addListener((changes, area) => {
-    if (area !== 'local' || !('corpSearchEnabled' in changes)) return;
-    settingChanged = true;
-    enabled = changes.corpSearchEnabled.newValue !== false;
+    if (area !== 'local') return;
+    if ('recentCorps' in changes) {
+      recentsChanged = true;
+      setRecents(changes.recentCorps.newValue);
+    }
+    if ('corpSearchEnabled' in changes) {
+      settingChanged = true;
+      enabled = changes.corpSearchEnabled.newValue === true;
+    }
+    if (!('recentCorps' in changes) && !('corpSearchEnabled' in changes)) return;
     schedule();
   });
-  chrome.storage.local.get({ corpSearchEnabled: true }).then(settings => {
-    if (settingChanged) return;
-    enabled = settings.corpSearchEnabled !== false;
+  chrome.storage.local.get({ corpSearchEnabled: false, recentCorps: [] }).then(settings => {
+    if (!settingChanged) enabled = settings.corpSearchEnabled === true;
+    if (!recentsChanged) setRecents(settings.recentCorps);
     schedule();
   }).catch(error => console.error('[jsy-tools] 无法读取企业快捷搜索设置', error));
 })();

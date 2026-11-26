@@ -10,22 +10,36 @@
 <body>
   <header class="topbar">
     <div class="brand"><img src="icons/icon-128.png" width="38" height="38" alt=""><div><h1>jsy-tools</h1><p>九数云效率工具</p></div></div>
-    <span class="version">v0.1.0</span>
+    <span class="version">v0.1.4</span>
   </header>
   <main aria-label="能力配置">
+    <section class="feature" aria-labelledby="group-batch-title">
+      <div class="feature-top">
+        <span class="feature-icon" aria-hidden="true">Σ</span>
+        <div class="feature-heading"><h2 id="group-batch-title">分类汇总批量设置</h2><p>一次修改多个已添加字段的汇总方式。</p></div>
+        <span id="group-batch-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="group-batch-enabled" type="checkbox" role="switch" aria-labelledby="group-batch-title"><span class="track" aria-hidden="true"></span></label>
+      </div>
+      <div class="feature-details">
+        <details class="usage"><summary>使用说明<span class="chevron" aria-hidden="true"></span></summary><div class="usage-content"><dl>
+          <div><dt>选择字段</dt><dd>点击「合并上一步数据」左侧的「批量设置」。左侧选中或取消字段时，同一来源的所有已有汇总项会同步勾选或取消。也可以点击右侧胶囊单独调整。</dd></div>
+          <div><dt>统一汇总方式</dt><dd>选择后立即应用。「第一项」和「最后一项」默认按各自来源字段升序排列。</dd></div>
+        </dl></div></details>
+      </div>
+    </section>
     <section class="feature" aria-labelledby="feature-title">
       <div class="feature-top">
         <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 0L7 8m5-5 5 5M4 14v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <div class="feature-heading"><h2 id="feature-title">快捷上传excel</h2><p id="feature-description">将 Excel 拖入项目页面，自动上传并加入当前项目。</p></div>
-        <span id="feature-state" class="feature-state">已开启</span>
-        <label class="switch"><input id="quick-upload" type="checkbox" role="switch" checked aria-labelledby="feature-title" aria-describedby="feature-description"><span class="track" aria-hidden="true"></span></label>
+        <span id="feature-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="quick-upload" type="checkbox" role="switch" aria-labelledby="feature-title" aria-describedby="feature-description"><span class="track" aria-hidden="true"></span></label>
       </div>
       <div class="feature-details">
         <div class="tags"><span>支持多文件</span><span>仅首个工作表</span><span>第一行为表头</span></div>
         <details class="usage">
           <summary>使用说明<span class="chevron" aria-hidden="true"></span></summary>
           <div class="usage-content"><dl>
-            <div><dt>自动生效</dt><dd>在任意 HTTP/HTTPS 域名和端口的 /decision/home/project/项目标识 及其子页面，拖入文件即可。</dd></div>
+            <div><dt>开启后生效</dt><dd>在任意 HTTP/HTTPS 域名和端口的 /decision/home/project/项目标识 及其子页面，拖入文件即可。</dd></div>
             <div><dt>静默导入</dt><dd>页面不显示提示、进度或结果浮层。</dd></div>
             <div><dt>按需关闭</dt><dd>关闭能力后，恢复页面原有的拖拽行为。</dd></div>
           </dl></div>
@@ -36,8 +50,8 @@
       <div class="feature-top">
         <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M4 7V3m0 4h4M4 7a9 9 0 1 1-1 8m9-9v6l4 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <div class="feature-heading"><h2 id="recent-feature-title">最近操作快捷栏</h2><p id="recent-description">在顶部直接使用最近操作，跨项目共用。</p></div>
-        <span id="recent-state" class="feature-state">已开启</span>
-        <label class="switch"><input id="recent-actions" type="checkbox" role="switch" checked aria-labelledby="recent-feature-title" aria-describedby="recent-description"><span class="track" aria-hidden="true"></span></label>
+        <span id="recent-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="recent-actions" type="checkbox" role="switch" aria-labelledby="recent-feature-title" aria-describedby="recent-description"><span class="track" aria-hidden="true"></span></label>
       </div>
       <div class="feature-details">
         <div class="tags"><span>自动记录</span><span>跨项目共用</span><span>单行显示</span></div>
@@ -56,18 +70,18 @@
       <div class="feature-top">
         <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 10h18M3 15h18M10 10v10" stroke="currentColor" stroke-width="1.7"/></svg></span>
         <div class="feature-heading"><h2 id="preview-feature-title">表数据预览</h2><p id="preview-description">配置分析步骤时，可暂时关闭表数据预览，减少反复加载数据的等待；重新开启后，加载最后一次预览请求的数据。</p></div>
-        <span id="preview-state" class="feature-state">已开启</span>
-        <label class="switch"><input id="table-preview" type="checkbox" role="switch" checked aria-labelledby="preview-feature-title" aria-describedby="preview-description"><span class="track" aria-hidden="true"></span></label>
+        <span id="preview-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="table-preview" type="checkbox" role="switch" aria-labelledby="preview-feature-title" aria-describedby="preview-description"><span class="track" aria-hidden="true"></span></label>
       </div>
       <div class="feature-details">
-        <div class="tags"><span>项目级生效</span><span>每次进入默认开启</span></div>
+        <div class="tags"><span>项目级生效</span><span>插件能力默认关闭</span></div>
         <details class="usage">
           <summary>使用说明<span class="chevron" aria-hidden="true"></span></summary>
           <div class="usage-content"><dl>
             <div><dt>项目开关</dt><dd>左侧项目栏底部显示开关，控制当前项目内所有分析表的数据预览。设置页开关只控制此能力是否启用。</dd></div>
             <div><dt>关闭预览</dt><dd>后续 page 请求直接返回空数据，保留字段表头，不影响步骤配置和保存；已经发出的请求不会取消。</dd></div>
             <div><dt>重新开启</dt><dd>仅补发最后一个被拦截的请求，对应的表和步骤不一定是当前可见页面；没有缓存时不补发。</dd></div>
-            <div><dt>默认开启</dt><dd>项目预览状态和请求缓存仅留在当前页面内存中，刷新或重新打开后恢复开启。停用此能力后恢复正常请求并清除缓存。</dd></div>
+            <div><dt>项目预览状态</dt><dd>开启插件能力后，项目预览状态和请求缓存仅留在当前页面内存中，刷新或重新打开后恢复开启。停用此能力后恢复正常请求并清除缓存。</dd></div>
           </dl></div>
         </details>
       </div>
@@ -76,8 +90,8 @@
       <div class="feature-top">
         <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 10h18M3 15h18M10 4v16" stroke="currentColor" stroke-width="1.7"/></svg></span>
         <div class="feature-heading"><h2 id="style-feature-title">表格样式</h2><p>调整分析表数据预览的外观，所有项目共用。</p></div>
-        <span id="style-state" class="feature-state">已开启</span>
-        <label class="switch"><input id="table-style-enabled" type="checkbox" role="switch" checked aria-labelledby="style-feature-title"><span class="track" aria-hidden="true"></span></label>
+        <span id="style-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="table-style-enabled" type="checkbox" role="switch" aria-labelledby="style-feature-title"><span class="track" aria-hidden="true"></span></label>
       </div>
       <div class="style-editor">
         <fieldset id="style-controls">
@@ -113,19 +127,132 @@
     <section class="feature" aria-labelledby="corp-search-title">
       <div class="feature-top">
         <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="7" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
-        <div class="feature-heading"><h2 id="corp-search-title">企业快捷搜索</h2><p id="corp-search-description">在“切换企业”弹窗中快速筛选企业，减少翻找。支持简道云“切换企业/团队”。</p></div>
-        <span id="corp-search-state" class="feature-state">已开启</span>
-        <label class="switch"><input id="corp-search-enabled" type="checkbox" role="switch" checked aria-labelledby="corp-search-title" aria-describedby="corp-search-description"><span class="track" aria-hidden="true"></span></label>
+        <div class="feature-heading"><h2 id="corp-search-title">企业快捷搜索</h2><p id="corp-search-description">快速搜索企业，最近使用的企业优先显示，减少翻找。</p></div>
+        <span id="corp-search-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="corp-search-enabled" type="checkbox" role="switch" aria-labelledby="corp-search-title" aria-describedby="corp-search-description"><span class="track" aria-hidden="true"></span></label>
       </div>
       <div class="feature-details">
-        <div class="tags"><span>输入即筛选</span><span>忽略英文大小写</span></div>
+        <div class="tags"><span>输入即筛选</span><span>最近使用优先</span><span>所有账号共用</span></div>
         <details class="usage">
           <summary>使用说明<span class="chevron" aria-hidden="true"></span></summary>
           <div class="usage-content"><dl>
-            <div><dt>搜索企业</dt><dd>打开“切换企业”弹窗，在标题下方输入企业名称即可模糊筛选，忽略英文大小写，保留原有排序。搜索框固定，仅企业列表滚动。</dd></div>
+            <div><dt>搜索企业</dt><dd>打开“切换企业”弹窗，在标题下方输入企业名称即可模糊筛选，忽略英文大小写。搜索框固定，仅企业列表滚动。</dd></div>
+            <div><dt>最近使用</dt><dd>根据列表确认的“当前所在企业”记录使用顺序，在原列表各分组内优先显示最近使用的企业，不新增分组。搜索结果沿用最近顺序，未使用过的企业保持原有相对顺序。记录保存在插件本地，所有账号共用，刷新和重启后保留。</dd></div>
             <div><dt>清空搜索</dt><dd>点击清空按钮，或有搜索内容时按 Esc，可恢复完整列表；重新打开弹窗后清空搜索内容。</dd></div>
             <div><dt>简道云适配</dt><dd>支持 jdydevelop.com 及其子域名下的 /dashboard#/ 页面。同时搜索“我创建的”和“我加入的”企业/团队，无匹配结果的分组标题和列表整体隐藏，保留加入、创建按钮。</dd></div>
-            <div><dt>按需关闭</dt><dd>默认开启，设置自动保存；关闭后移除搜索框，恢复完整企业列表，不改变企业切换和创建流程。</dd></div>
+            <div><dt>按需关闭</dt><dd>默认关闭，设置自动保存；关闭后移除搜索框，恢复完整企业列表及原顺序，停止记录最近企业，已有记录保留。不改变企业切换和创建流程。</dd></div>
+          </dl></div>
+        </details>
+      </div>
+    </section>
+    <section class="feature" aria-labelledby="quick-copy-title">
+      <div class="feature-top">
+        <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><rect x="8" y="8" width="12" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.7"/></svg></span>
+        <div class="feature-heading"><h2 id="quick-copy-title">快捷创建副本</h2><p id="quick-copy-description">使用 Ctrl+C / Ctrl+V，在当前项目的原资源下方创建副本。</p></div>
+        <span id="quick-copy-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="quick-copy-enabled" type="checkbox" role="switch" aria-labelledby="quick-copy-title" aria-describedby="quick-copy-description"><span class="track" aria-hidden="true"></span></label>
+      </div>
+      <div class="feature-details">
+        <div class="tags"><span>表 / FVS / 故事板 / 指标树</span><span>单个复制</span><span>当前项目内</span></div>
+        <details class="usage">
+          <summary>使用说明<span class="chevron" aria-hidden="true"></span></summary>
+          <div class="usage-content"><dl>
+            <div><dt>快捷操作</dt><dd>先点击左侧资源，按 Ctrl+C 复制，再按 Ctrl+V 创建副本；每次仅复制一个，不能跨项目粘贴。</dd></div>
+            <div><dt>创建结果</dt><dd>自动命名为“原名称_时间戳”，重名时追加序号。副本插入同一分组的原资源下方并保存排序；停留在原资源，更新列表并提示成功。</dd></div>
+            <div><dt>文字编辑</dt><dd>从左侧资源复制后，点击画布仍可按 Ctrl+V 创建副本。输入框、公式编辑器和文字选区仍使用正常的复制粘贴。</dd></div>
+            <div><dt>复制内容</dt><dd>复制服务端已保存的资源，未保存的编辑不会包含。沿用当前登录态和服务端权限校验；创建过程中重复按键不会重复提交。</dd></div>
+            <div><dt>页面状态</dt><dd>复制记录只留在当前页面内存中，刷新、切换窗口或复制其他文字后清空；不保存资源内容。默认关闭，关闭后恢复原有快捷键行为，已创建的副本保留。</dd></div>
+          </dl></div>
+        </details>
+      </div>
+    </section>
+    <section class="feature" aria-labelledby="tab-close-title">
+      <div class="feature-top">
+        <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M4 8V5a2 2 0 0 1 2-2h11m-7 14H5a2 2 0 0 1-2-2V8h17v4m-5 3 6 6m0-6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="feature-heading"><h2 id="tab-close-title">标签页快捷关闭</h2><p id="tab-close-description">右键项目资源标签，快速关闭其它标签页。<br>强行关闭会直接丢弃其它标签的未保存修改，不再确认。</p></div>
+        <span id="tab-close-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="tab-close-enabled" type="checkbox" role="switch" aria-labelledby="tab-close-title" aria-describedby="tab-close-description"><span class="track" aria-hidden="true"></span></label>
+      </div>
+      <p style="font-size:12px;color:#68768a;margin:22px 0 0 64px">关闭其它标签页（强行） · 关闭其他已保存标签页</p>
+      <div class="feature-details">
+        <div class="tags"><span>标签右键</span><span>保留目标标签</span></div>
+        <details class="usage"><summary>使用说明<span class="chevron" aria-hidden="true"></span></summary><div class="usage-content"><dl>
+          <div><dt>右键入口</dt><dd>在当前项目顶部资源标签上右键，以右键点击的标签为保留目标，包含溢出未显示的其它资源标签。</dd></div>
+          <div><dt>强行关闭</dt><dd>直接丢弃其它标签的未保存修改并关闭，不弹确认；保留目标标签及其修改，不删除项目资源。</dd></div>
+          <div><dt>只关已保存</dt><dd>直接关闭其它没有未保存修改的标签，保留目标标签和所有未保存的标签。</dd></div>
+          <div><dt>按需关闭</dt><dd>默认关闭，设置自动保存；关闭此能力后恢复原有右键行为，不影响标签的点击、编辑和原生关闭按钮。</dd></div>
+        </dl></div></details>
+      </div>
+    </section>
+    <section class="feature" aria-labelledby="automation-inline-title">
+      <div class="feature-top">
+        <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M9 4v16M5 8h2M5 12h2M5 16h2" stroke="currentColor" stroke-width="1.7"/></svg></span>
+        <div class="feature-heading"><h2 id="automation-inline-title">自动化内嵌显示</h2><p id="automation-inline-description">将自动化放入项目右侧内容区，保留顶部标签和左侧资源列表。<br>沿用原“自动化”入口，切换资源时保留编辑状态，不自动保存。</p></div>
+        <span id="automation-inline-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="automation-inline-enabled" type="checkbox" role="switch" aria-labelledby="automation-inline-title" aria-describedby="automation-inline-description"><span class="track" aria-hidden="true"></span></label>
+      </div>
+      <div class="feature-details">
+        <div class="tags"><span>原入口进入</span><span>保留编辑状态</span></div>
+        <details class="usage"><summary>使用说明<span class="chevron" aria-hidden="true"></span></summary><div class="usage-content"><dl>
+          <div><dt>显示位置</dt><dd>在符合项目路径规则的页面中，点击原“自动化”按钮，自动化显示在右侧资源内容区，不遮挡项目列表和顶部标签，不新增自动化标签。</dd></div>
+          <div><dt>切换资源</dt><dd>点击左侧资源或顶部已打开的标签可切换；自动化编辑实例保留，再次点击原入口可继续编辑，不自动保存。</dd></div>
+          <div><dt>原生操作</dt><dd>自动化的保存、执行、权限和关闭确认沿用产品行为。插件只调整布局及已有实例的显示，不发送保存、执行或删除请求。</dd></div>
+          <div><dt>按需关闭</dt><dd>默认关闭，设置自动保存；关闭后移除内嵌布局，恢复产品原有展示方式。不支持的页面结构会在控制台说明，不强行移动编辑器。</dd></div>
+        </dl></div></details>
+      </div>
+    </section>
+    <section class="feature" aria-labelledby="cross-project-reference-title">
+      <div class="feature-top">
+        <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="m10 13 4-4m-6 2-3 3a4 4 0 0 0 6 6l3-3m-4-10 3-3a4 4 0 0 1 6 6l-3 3"/></svg></span>
+        <div class="feature-heading"><h2 id="cross-project-reference-title">快捷开启跨项目引用</h2><p id="cross-project-reference-description">在添加数据时，直接为来源表开启跨项目引用。<br>开启后可手动勾选来源表。</p></div>
+        <span id="cross-project-reference-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="cross-project-reference-enabled" type="checkbox" role="switch" aria-labelledby="cross-project-reference-title" aria-describedby="cross-project-reference-description"><span class="track" aria-hidden="true"></span></label>
+      </div>
+      <div class="feature-details">
+        <div class="tags"><span>添加数据 · 当前空间</span></div>
+        <details class="usage"><summary>使用说明<span class="chevron" aria-hidden="true"></span></summary><div class="usage-content"><dl>
+          <div><dt>开启引用</dt><dd>悬浮在未开启引用的来源表行上，有权限时可点击行右侧的「开启跨项目引用」。点击后立即提交，成功后可手动勾选该表。</dd></div>
+          <div><dt>插件开关</dt><dd>关闭后隐藏快捷入口，已开启的来源表设置仍保留。</dd></div>
+        </dl></div></details>
+      </div>
+    </section>
+    <section class="feature" aria-labelledby="quick-step-delete-title">
+      <div class="feature-top">
+        <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="m9 9 6 6m0-6-6 6"/></svg></span>
+        <div class="feature-heading"><h2 id="quick-step-delete-title">步骤快捷删除</h2><p id="quick-step-delete-description">悬浮在步骤上，通过右上角按钮快捷操作。</p></div>
+        <span id="quick-step-delete-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="quick-step-delete-enabled" type="checkbox" role="switch" aria-labelledby="quick-step-delete-title" aria-describedby="quick-step-delete-description"><span class="track" aria-hidden="true"></span></label>
+      </div>
+      <div class="feature-details">
+        <div class="tags"><span>悬浮显示</span><span>分析表步骤</span></div>
+        <div class="step-apply-option">
+          <div><label id="quick-step-apply-label" for="quick-step-apply-mode">是否改为快捷应用</label><p id="quick-step-apply-description">主开关开启时，改用「−」取消应用和「√」重新应用。</p></div>
+          <span id="quick-step-apply-state" class="feature-state">已关闭</span>
+          <label class="switch"><input id="quick-step-apply-mode" type="checkbox" role="switch" aria-labelledby="quick-step-apply-label" aria-describedby="quick-step-apply-description"><span class="track" aria-hidden="true"></span></label>
+        </div>
+        <details class="usage"><summary>使用说明<span class="chevron" aria-hidden="true"></span></summary><div class="usage-content"><dl>
+          <div><dt>普通步骤</dt><dd>点击步骤右上角的 ×，立即删除该步骤。</dd></div>
+          <div><dt>来源表</dt><dd>点击来源表右上角的 ×，立即删除全部后续分析步骤，保留来源表和图表。</dd></div>
+          <div><dt>快捷应用</dt><dd>开启切换开关后，悬浮在已应用的步骤上显示「−」，悬浮在未应用的步骤上显示「√」。来源表隐藏快捷按钮。</dd></div>
+        </dl></div></details>
+      </div>
+    </section>
+    <section class="feature" aria-labelledby="recent-projects-title">
+      <div class="feature-top">
+        <span class="feature-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M4 8h16m0 0-4-4m4 4-4 4M20 16H4m0 0 4-4m-4 4 4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="feature-heading"><h2 id="recent-projects-title">项目快速切换</h2><p id="recent-projects-description">在项目名左侧显示下拉，快速切换最近打开的项目。</p></div>
+        <span id="recent-projects-state" class="feature-state">已关闭</span>
+        <label class="switch"><input id="recent-projects-enabled" type="checkbox" role="switch" aria-labelledby="recent-projects-title" aria-describedby="recent-projects-description"><span class="track" aria-hidden="true"></span></label>
+      </div>
+      <div class="feature-details">
+        <div class="tags"><span>复用左侧最近项目</span><span>项目内切换</span></div>
+        <details class="usage">
+          <summary>使用说明<span class="chevron" aria-hidden="true"></span></summary>
+          <div class="usage-content"><dl>
+            <div><dt>入口位置</dt><dd>项目内左上角，当前项目名称的左侧。</dd></div>
+            <div><dt>项目来源</dt><dd>展示首页左侧已有的最近打开项目，与原列表保持一致。</dd></div>
+            <div><dt>快速切换</dt><dd>展开下拉后，点击项目即可切换；当前项目显示选中标记。</dd></div>
+            <div><dt>按需关闭</dt><dd>默认关闭，设置自动保存；关闭后隐藏项目内下拉，不影响原有最近项目列表。</dd></div>
           </dl></div>
         </details>
       </div>

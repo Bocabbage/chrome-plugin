@@ -1,7 +1,7 @@
 (() => {
-  const defaults = { enabled: true, preset: "zebra", color: "#00afa5", size: "medium" };
+  const defaults = { enabled: false, preset: "zebra", color: "#00afa5", size: "medium" };
   const normalize = value => ({
-    enabled: value?.enabled !== false,
+    enabled: value?.enabled === true,
     preset: ["simple", "zebra", "grid"].includes(value?.preset) ? value.preset : defaults.preset,
     color: /^#[\da-f]{6}$/i.test(value?.color || "") ? value.color.toLowerCase() : defaults.color,
     size: ["small", "medium", "large"].includes(value?.size) ? value.size : defaults.size,

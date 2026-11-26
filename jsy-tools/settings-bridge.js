@@ -4,8 +4,8 @@
     return;
   }
   // 桥接独立初始化，旧页面或单独注入时不依赖另一份脚本已加载。
-  const defaults = { quickUploadExcel: true, recentActionsEnabled: true, tablePreviewEnabled: true, recentActions: [],
-    tableStyle: { enabled: true, preset: "zebra", color: "#00afa5", size: "medium" } };
+  const defaults = { quickUploadExcel: false, recentActionsEnabled: false, tablePreviewEnabled: false, quickCopyEnabled: false, recentProjectsEnabled: false, tabCloseEnabled: false, automationInlineEnabled: false, recentActions: [],
+    crossProjectReferenceEnabled: false, quickStepDeleteEnabled: false, groupBatchEnabled: false, quickStepApplyMode: false, tableStyle: { enabled: false, preset: "zebra", color: "#00afa5", size: "medium" } };
   let settings = { ...defaults };
   let ready = false;
   let stopped = false;

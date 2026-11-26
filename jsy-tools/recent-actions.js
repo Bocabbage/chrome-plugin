@@ -6,6 +6,7 @@
   const groupKeys = new Set([13, 14, 15, 16, 17, 25]);
   const confirmingKeys = new Set([8, 74]);
   const bars = new Map();
+  const containerSelector = ".hd-analysis-quick-operator, [data-host-quick-operator-slot]";
   let enabled = false;
   let recent = [];
   let scheduled = false;
@@ -94,9 +95,30 @@
     return null;
   }
 
+  function currentFiber(element) {
+    const key = Object.keys(element).find(name => name.startsWith("__reactFiber$"));
+    const fiber = key && element[key];
+    if (!fiber) return null;
+    let root = fiber;
+    while (root.return) root = root.return;
+    const current = root.stateNode?.current;
+    return current ? walk(current, node => node.stateNode === element) : fiber;
+  }
+
   // shortcut: 沿用页面 React 内部结构读取菜单与回调；无法识别时保留原工具栏，产品升级后再适配。
   function toolsFiber(container) {
+    const v2 = container.matches("[data-host-quick-operator-slot]");
     for (const element of [container, ...container.querySelectorAll("*")]) {
+      if (v2) {
+        if (element.closest("[data-jsy-recent-bar]")) continue;
+        for (let node = currentFiber(element); node; node = node.return) {
+          const props = node.memoizedProps;
+          if (Array.isArray(props?.excludeOperators) && typeof props.onItemClick === "function" &&
+              typeof props.disabled === "boolean" && "warningTitle" in props) return node;
+          if (node.stateNode === container) break;
+        }
+        continue;
+      }
       const key = Object.keys(element).find(name => name.startsWith("__reactContainer$") || name.startsWith("__reactFiber$"));
       if (!key) continue;
       let root = element[key];
@@ -109,29 +131,39 @@
       });
       if (tools) return tools;
     }
+    // V2 图表节点不挂载 Tools，改用当前历史菜单的操作目录和原生回调。
+    if (v2) {
+      const menu = historyMenu(container);
+      if (menu) return { ...menu.fiber, child: null, memoizedState: null,
+        memoizedProps: { disabled: menu.disabled, warningTitle: "", onItemClick: key => menu.props.content.props.onAfterSelect({ key }) } };
+    }
     return null;
   }
 
   function historyMenu(container) {
-    const scope = container.closest(".hd-conf-analysis");
+    const scope = container.closest("[data-analysis-v2-standalone-host], .hd-conf-analysis");
     const trigger = scope?.querySelector('[data-test-type="analysis-history-add-trigger"][data-test-name="history-flow-big-add"]');
-    const key = trigger && Object.keys(trigger).find(name => name.startsWith("__reactFiber$"));
-    let node = key && trigger[key];
-    while (node) {
-      const props = node.memoizedProps;
-      if (props?.content?.props?.["data-test-id"] === "analysis-history-add-menu" &&
-          Array.isArray(props.content.props.items) && typeof props.onVisibleChange === "function") {
-        return { fiber: node, props, disabled: trigger.getAttribute("data-test-disabled") === "true" ||
-          Boolean(trigger.querySelector('[data-test-disabled="true"]')) };
+    const entries = trigger ? [trigger] : Array.from(scope?.querySelectorAll(".hd-history-flow-add-combo") || []);
+    for (const entry of entries) {
+      for (const element of [entry, ...entry.querySelectorAll("*")]) {
+        let node = currentFiber(element);
+        while (node) {
+          const props = node.memoizedProps;
+          if (Array.isArray(props?.content?.props?.items) && typeof props.content.props.onAfterSelect === "function" &&
+              typeof props.onVisibleChange === "function") {
+            return { fiber: node, props, disabled: entry.getAttribute("data-test-disabled") === "true" ||
+              Boolean(entry.querySelector('[data-test-disabled="true"]')) };
+          }
+          node = node.return;
+        }
       }
-      node = node.return;
     }
     return null;
   }
 
   function isChartEditor(container) {
     const header = container.closest('[data-test-id="analysis-editor-header"]');
-    if (!header) return false;
+    if (!header || container.matches("[data-host-quick-operator-slot]")) return false;
     for (const element of header.querySelectorAll("*")) {
       const key = Object.keys(element).find(name => name.startsWith("__reactContainer$") || name.startsWith("__reactFiber$"));
       if (!key) continue;
@@ -326,7 +358,7 @@
       if (!enabled || !inProject() || !container.isConnected) restore(container, state);
     }
     if (!enabled || !inProject()) return;
-    for (const container of document.querySelectorAll(".hd-analysis-quick-operator")) {
+    for (const container of document.querySelectorAll(containerSelector)) {
       const fiber = toolsFiber(container);
       const actions = fiber && catalog(fiber, container);
       if (!actions?.size) {
@@ -369,8 +401,7 @@
 
   function clickedMenuAction(target) {
     for (let element = target; element; element = element.parentElement) {
-      const key = Object.keys(element).find(name => name.startsWith("__reactFiber$"));
-      let node = key && element[key];
+      let node = currentFiber(element);
       let item;
       while (node) {
         const props = node.memoizedProps;
@@ -380,6 +411,20 @@
           if (item.disabled || item.children?.length || groupKeys.has(item.key)) return null;
           const label = labelText(item.label).trim();
           return label && label.length <= 120 ? { key: item.key, label, cachedIcon: iconData(element.querySelector("svg")) } : null;
+        }
+        if (item && Array.isArray(props?.items) && typeof props.onAfterSelect === "function") {
+          // 弹层可能单独挂载 React 根；用原菜单 items 的身份关联分析表，不能依赖测试属性或跨根的祖先链。
+          for (const container of document.querySelectorAll(containerSelector)) {
+            const tools = toolsFiber(container);
+            if (!tools || tools.memoizedProps.disabled) continue;
+            const history = historyMenu(container);
+            const ownsMenu = history?.props.content.props.items === props.items || walk(tools.child, current =>
+              current.memoizedProps?.content?.props?.items === props.items && typeof current.memoizedProps.onVisibleChange === "function");
+            if (!ownsMenu) continue;
+            const action = catalog(tools, container).get(item.key);
+            if (!action || action.disabled || item.disabled || item.children?.length || groupKeys.has(item.key)) return null;
+            return { key: action.key, label: action.label, cachedIcon: iconData(element.querySelector("svg")) };
+          }
         }
         node = node.return;
       }
@@ -401,7 +446,7 @@
     const menuAction = clickedMenuAction(event.target);
     if (menuAction) { remember(menuAction); return; }
     // 原顶部直达按钮同样记入最近操作，不把分类下拉、右侧管理按钮计入。
-    for (const container of document.querySelectorAll(".hd-analysis-quick-operator")) {
+    for (const container of document.querySelectorAll(containerSelector)) {
       if (!container.contains(event.target) || event.target.closest("[data-jsy-recent-bar]")) continue;
       const button = event.target.closest("button");
       if (!button || button.disabled) continue;

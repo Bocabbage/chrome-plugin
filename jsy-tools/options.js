@@ -1,10 +1,18 @@
 const saveStatus = document.querySelector("#save-status");
 const isExtension = Boolean(globalThis.chrome?.storage?.local && globalThis.chrome?.runtime?.id);
 const capabilities = [
+  { key: "groupBatchEnabled", input: document.querySelector("#group-batch-enabled"), state: document.querySelector("#group-batch-state") },
   { key: "quickUploadExcel", input: document.querySelector("#quick-upload"), state: document.querySelector("#feature-state") },
   { key: "recentActionsEnabled", input: document.querySelector("#recent-actions"), state: document.querySelector("#recent-state") },
   { key: "tablePreviewEnabled", input: document.querySelector("#table-preview"), state: document.querySelector("#preview-state") },
   { key: "corpSearchEnabled", input: document.querySelector("#corp-search-enabled"), state: document.querySelector("#corp-search-state") },
+  { key: "quickCopyEnabled", input: document.querySelector("#quick-copy-enabled"), state: document.querySelector("#quick-copy-state") },
+  { key: "tabCloseEnabled", input: document.querySelector("#tab-close-enabled"), state: document.querySelector("#tab-close-state") },
+  { key: "automationInlineEnabled", input: document.querySelector("#automation-inline-enabled"), state: document.querySelector("#automation-inline-state") },
+  { key: "crossProjectReferenceEnabled", input: document.querySelector("#cross-project-reference-enabled"), state: document.querySelector("#cross-project-reference-state") },
+  { key: "quickStepDeleteEnabled", input: document.querySelector("#quick-step-delete-enabled"), state: document.querySelector("#quick-step-delete-state") },
+  { key: "quickStepApplyMode", input: document.querySelector("#quick-step-apply-mode"), state: document.querySelector("#quick-step-apply-state") },
+  { key: "recentProjectsEnabled", input: document.querySelector("#recent-projects-enabled"), state: document.querySelector("#recent-projects-state") },
 ];
 
 function render(capability, enabled) {
@@ -13,17 +21,18 @@ function render(capability, enabled) {
 }
 
 if (isExtension) {
+  const defaults = { quickUploadExcel: false, recentActionsEnabled: false, tablePreviewEnabled: false, corpSearchEnabled: false, quickCopyEnabled: false, recentProjectsEnabled: false, tabCloseEnabled: false, automationInlineEnabled: false, crossProjectReferenceEnabled: false, quickStepDeleteEnabled: false, groupBatchEnabled: false, quickStepApplyMode: false };
   capabilities.forEach(capability => { capability.input.disabled = true; });
-  chrome.storage.local.get({ quickUploadExcel: true, recentActionsEnabled: true, tablePreviewEnabled: true, corpSearchEnabled: true }).then(settings => {
+  chrome.storage.local.get(defaults).then(settings => {
     capabilities.forEach(capability => {
-      render(capability, settings[capability.key] !== false);
+      render(capability, settings[capability.key] === true);
       capability.input.disabled = false;
     });
   }).catch(() => { saveStatus.textContent = "读取设置失败，请重新打开配置页"; });
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== "local") return;
     capabilities.forEach(capability => {
-      if (capability.key in changes) render(capability, changes[capability.key].newValue !== false);
+      if (capability.key in changes) render(capability, changes[capability.key].newValue === true);
     });
   });
 } else {

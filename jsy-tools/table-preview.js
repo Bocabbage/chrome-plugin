@@ -210,7 +210,7 @@
   }
   window.addEventListener("message", event => {
     if (event.source !== window || event.origin !== location.origin || event.data?.channel !== "jsy-tools" || event.data.type !== "settings") return;
-    enabled = event.data.tablePreviewEnabled !== false;
+    enabled = event.data.tablePreviewEnabled === true;
     if (!enabled) {
       projects.clear();
       replayResponse = null;

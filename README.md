@@ -12,7 +12,7 @@
 | 目录 | 插件名 | 类型 | 用途 |
 | --- | --- | --- | --- |
 | `api-rewriter` | API Rewriter | Chrome 插件 | 在当前标签页的 Side Panel 中按需记录和拦截 Fetch/XHR JSON 接口，支持手动修改 Body、自动规则、请求体模板、持久接口过滤和 JSON 导入导出。 |
-| `jsy-tools` | jsy-tools | Chrome 插件 | 九数云效率工具，支持快捷上传 Excel 和跨项目最近操作快捷栏，配置页可独立开关。 |
+| [jsy-tools](jsy-tools/README.md) | jsy-tools | Chrome 插件 | 九数云效率工具，支持分类汇总批量设置、最近操作快捷栏、Excel 快捷上传和企业搜索等功能，默认关闭，可按需开启。 |
 | `codex-quota` | Codex Quota | 桌面应用 | 提供跨平台 Electron Codex 额度浮窗，支持托盘入口、额度详情、重置时间展示和主题切换。 |
 | `feishu-jump` | Feishu Task Jumper | Chrome 插件 | 输入飞书项目 `f-`、`m-`、`g-`、`s-` 或 Jira `JSY-`、`REPORT-`、`KERNEL-` 任务号，快速打开对应详情页；也支持浏览器地址栏 `fs` 关键字跳转。 |
 | `group` | group | Chrome 插件 | 将页面保存到本地分组中，支持分组图标/颜色、快捷固定、内联重命名和批量打开，便于按工作上下文快速恢复一组相关页面。 |

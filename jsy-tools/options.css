@@ -17,7 +17,10 @@ main { width: min(1000px, calc(100% - 40px)); margin: 46px auto; }
 h2 { font-size: 16px; font-weight: 600; }
 .feature-heading p { color: #68768a; font-size: 12px; line-height: 1.7; margin-top: 5px; }
 .feature-state { color: #2864db; font-size: 11px; white-space: nowrap; }
-.feature:has(.switch input:not(:checked)) .feature-state { color: #7b8799; }
+.feature-top:has(.switch input:not(:checked)) .feature-state, .step-apply-option:has(input:not(:checked)) .feature-state { color: #7b8799; }
+.step-apply-option { display:flex; align-items:center; gap:16px; margin-top:14px; padding:10px 12px; border-radius:8px; background:#f5f8fc; font-size:12px; }
+.step-apply-option > div { flex:1; }
+.step-apply-option p { margin-top:4px; color:#68768a; }
 .feature-details { position: relative; margin: 22px 0 0 64px; }
 .tags { display: flex; gap: 10px; flex-wrap: wrap; padding-right: 120px; min-height: 26px; align-items: center; }
 .tags span { padding: 3px 9px; color: #68768a; background: #f4f7fb; border-radius: 4px; font-size: 11px; white-space: nowrap; }
